@@ -6,7 +6,7 @@ IN1 = Pin(7, Pin.OUT)
 IN2 = Pin(8, Pin.OUT)
 
 speed_l = PWM(Pin(6))
-speed_l.freq(1000)
+speed_l.freq(10000)
 
 # Motor 2 RIGHT
 IN3 = Pin(10, Pin.OUT)
