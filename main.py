@@ -1,129 +1,51 @@
+from machine import UART
+from l298 import DCMotor
 from machine import Pin, PWM
 from time import sleep
+import time
 
-# Motor 1 LEFT
-IN1 = Pin(7, Pin.OUT)
-IN2 = Pin(8, Pin.OUT)
+# motor left
+frequency = 15000
+pin1 = Pin(7, Pin.OUT)
+pin2 = Pin(8, Pin.OUT)
+enable_l = PWM(Pin(6))
 
-speed_l = PWM(Pin(6))
-speed_l.freq(500)
+# motor right
+pin3 = Pin(10, Pin.OUT)
+pin4 = Pin(11, Pin.OUT)
+enable_r = PWM(Pin(9))
 
-# Motor 2 RIGHT
-IN3 = Pin(10, Pin.OUT)
-IN4 = Pin(11, Pin.OUT)
-
-speed_r = PWM(Pin(9))
-speed_r.freq(500)
-
-speed_now = 25000
-
-# initialisieren
-IN1.low()
-IN2.low()
-IN3.low()
-IN4.low()
+enable_r.freq(500)
+enable_l.freq(500)
+dc_motor = DCMotor(pin1, pin2, pin3, pin4, enable_l, enable_r, 20000, 65535)
 
 
-def forward():
-    speed_l.duty_u16(speed_now)
-    IN1.low()
-    IN2.high()
-    speed_r.duty_u16(speed_now)
-    IN3.low()
-    IN4.high()
+for i in range(0, 3):
+    print(i)
 
+    dc_motor.forward(40)  # motor is running
+    print("forward")
+    time.sleep(1)
 
-def backward():
-    speed_l.duty_u16(speed_now)
-    IN1.high()
-    IN2.low()
-    speed_r.duty_u16(speed_now)
-    IN3.high()
-    IN4.low()
+    dc_motor.stop()  # stops motor
+    time.sleep(1)
 
+    dc_motor.backwards(40)  # the motor turns in the opposite direction
+    time.sleep(1)
 
-def stop():
-    speed_l.duty_u16(0)
-    IN1.low()
-    IN2.low()
-    speed_r.duty_u16(0)
-    IN3.low()
-    IN4.low()
+    dc_motor.stop()  # stops motor
+    time.sleep(1)
 
+    print("left")
+    dc_motor.left(20)
+    time.sleep(0.5)
 
-def left():
-    speed_l.duty_u16(0)
-    IN1.low()
-    IN2.low()
-    speed_r.duty_u16(speed_now)
-    IN3.low()
-    IN4.high()
+    dc_motor.stop()
+    time.sleep(1)
 
+    print("right")
+    dc_motor.right(20)
+    time.sleep(0.5)
 
-def right():
-    speed_l.duty_u16(speed_now)
-    IN1.low()
-    IN2.high()
-    speed_r.duty_u16(0)
-    IN3.low()
-    IN4.low()
-
-
-def test():
-    forward()
-    sleep(2)
-
-    stop()
-    sleep(0.2)
-
-    backward()
-    sleep(3)
-
-    stop()
-    sleep(0.2)
-
-    left()
-    sleep(0.5)
-
-    stop()
-    sleep(0.2)
-
-    right()
-    sleep(0.5)
-
-    stop()
-
-
-for i in range(1, 5):
-    test()
-
-# while True:
-#     speed_l.duty_u16(65535)
-#     print("forward 65535")
-#     IN1.low()  # spin forward
-#     IN2.high()
-#     sleep(5)
-#
-#     IN1.low()  # stop
-#     IN2.low()
-#     sleep(2)
-#
-#     speed_l.duty_u16(60000)
-#     print("backward 60000")
-#     IN1.high()  # spin backward
-#     IN2.low()
-#     sleep(5)
-#
-#     IN1.low()  # stop
-#     IN2.low()
-#     sleep(2)
-#
-#     speed_l.duty_u16(50000)
-#     print("forward 50000")
-#     IN1.low()  # spin forward
-#     IN2.high()
-#     sleep(5)
-#
-#     IN1.low()  # stop
-#     IN2.low()
-#     sleep(2)
+    dc_motor.stop()
+    time.sleep(1)

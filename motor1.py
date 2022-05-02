@@ -6,16 +6,24 @@ IN1 = Pin(7, Pin.OUT)
 IN2 = Pin(8, Pin.OUT)
 
 speed_l = PWM(Pin(6))
-speed_l.freq(1000)
+speed_l.freq(500)
 
 # Motor 2 RIGHT
 IN3 = Pin(10, Pin.OUT)
 IN4 = Pin(11, Pin.OUT)
 
 speed_r = PWM(Pin(9))
-speed_r.freq(10000)
+speed_r.freq(500)
 
-speed_now = 65000
+
+speed = 0.5
+speed_now = int(speed * 65535)
+
+# initialisieren
+IN1.low()
+IN2.low()
+IN3.low()
+IN4.low()
 
 
 def forward():
@@ -25,6 +33,8 @@ def forward():
     speed_r.duty_u16(speed_now)
     IN3.low()
     IN4.high()
+
+    print("forward " + str(speed_now))
 
 
 def backward():
@@ -65,21 +75,31 @@ def right():
 
 def test():
     forward()
-    sleep(5)
+    sleep(2)
+
+    stop()
+    sleep(0.2)
 
     backward()
-    sleep(5)
+    sleep(3)
+
+    stop()
+    sleep(0.2)
 
     left()
-    sleep(0.4)
+    sleep(0.5)
+
+    stop()
+    sleep(0.2)
 
     right()
-    sleep(0.4)
+    sleep(0.5)
 
     stop()
 
 
 for i in range(1, 5):
+    print(i)
     test()
 
 # while True:

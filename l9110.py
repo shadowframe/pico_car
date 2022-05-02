@@ -8,7 +8,7 @@ motor1b = PWM(Pin(7))
 motor2a = PWM(Pin(8))
 motor2b = PWM(Pin(9))
 # freq für alle motoren einstellen
-motor1a.freq(12000)
+motor1a.freq(50)
 motor1b.freq(50)
 motor2a.freq(50)
 motor2b.freq(50)
